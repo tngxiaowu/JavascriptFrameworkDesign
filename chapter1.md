@@ -73,12 +73,14 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 
 ```
 	 var toArray =  function(){
+	 		//通过isIE这个外部遍历判断是否处于IE浏览器中
 			return isIE ? 
 			// 在IE浏览器环境下 多了一个res的参数 
 			function(a,i,j,res){
 			// res为数组容器
 				res = [];
 			// 遍历这个com对象 将它所有的元素放进res中
+			// 因为each方法还是非常关键的 剔除了一些非索引的属性
 				Ext.each(a,function(v){
 					res.push(v);
 				})
@@ -90,6 +92,6 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 				function(a,i,j){
 					return Array.prototype.slice.call(a, i||0,j||a.length);
 				}
-		 }();
+		 }();//注意这里的() 这里是直接执行的 也就是根据isIE判断返回哪个函数
 
 ```
