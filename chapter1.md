@@ -1,7 +1,7 @@
 # chapter 1 
 
 ## 1.4 数组化
-###p6
+### p6
 #### 1.使用Array.prototype.slice.call将类数组转换为数组
 Demo:
 
