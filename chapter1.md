@@ -67,3 +67,29 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 		}
 
 ```
+
+### P7 
+#### 1. Ext下的toArray方法
+
+```
+	 var toArray =  function(){
+			return isIE ? 
+			// 在IE浏览器环境下 多了一个res的参数 
+			function(a,i,j,res){
+			// res为数组容器
+				res = [];
+			// 遍历这个com对象 将它所有的元素放进res中
+				Ext.each(a,function(v){
+					res.push(v);
+				})
+			//对这个进行slice操作
+				return res.slice(i||0, j||res.length);
+				}
+			//如果不是IE浏览器 那就好办了 直接上Array.prototype.slice.call
+				:
+				function(a,i,j){
+					return Array.prototype.slice.call(a, i||0,j||a.length);
+				}
+		 }();
+
+```
