@@ -67,6 +67,8 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 		}
 
 ```
+****
+
 
 ### P7 
 #### 1. Ext下的toArray方法
@@ -95,3 +97,68 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 		 }();//注意这里的() 这里是直接执行的 也就是根据isIE判断返回哪个函数
 
 ```
+****
+
+
+### P14
+#### 1.jQuery中判断数据类型的方法
+思路： 1.定义一个对象 以键值对的形式存储相应的数据类型
+	   2.根据typeof的缺陷去做一个合理的判断 先处理null/undefined类型 再处理Number/String/Bollean，最后将难处理的function date obj等类型进行对象的映射！
+
+
+```
+	var class2type = {}; //定义一个变量
+	jQuery.each("Boolean Number String Function Null Array Date RegExp Object Error".split(" "),function(i,name){
+			class2type[ "[object " + name + "]" ] = name.toLowerCase();
+	}) //将数据类型存储到对象中
+	core_toString = class2type.toString; //定义一个core.toSting变量
+
+	jQuery.type = function(obj){
+		/** 知识点1:判断null == null或者 undefined == null都会返回为true */
+		/** 知识点2：String(obj) 首先会看obj有没有toString方法，有的话直接调用。而没有
+		toString方法的只有null和undefined，则返回相应的null和undefined.
+		*/
+		//这里主要判断null和undefined类型，利用知识点1，当传入的obj为null或者undefined时，也返回它们自己的类型(null或者undefined)；
+		if(obj == null){
+			return String(obj);
+		}
+		
+		//当Obj的类型不为null/undefined时
+		/**知识点3：因为tyeof的缺陷 Number/String/Boolean都可以进行判断 剩下就是当typeof为"object"时剩下的一些数据类型判断*/
+		/**知识点4：typeof obj ==="function"是为了修补5.5以下版本的safri会RegExptypeof		为function(浏览器Bug);
+		*/
+			return typeof obj === "object" || typeof obj ==="function" ?
+		
+		//core_toString.call(obj) 相当于 obj.toString();转化为字符串
+		//这样core_toString.call(obj)可以暴露出很多(例如[object Function]等）
+			class2type[ core_toString.call(obj)] || "object" :
+			typeof obj;
+		}	
+	
+```
+ 1. 疑问1：class2type[ "[object " + name + "]" ]这种写法怎么暴露不出来？
+ 2. 疑问2： core_toString.call(obj)这句话会编译成什么样子？
+ 	core_toString.call(obj) 相当于 obj.toString();转化为字符串 自己可以玩一下
+ 3. jQuery.type的执行顺序为？	
+	一旦执行了return,就表明这个函数已经运行完，如下代码所示：
+	
+	```
+		function demo(){
+			var a = 1;
+			//如果if中条件为true 那么执行线路1 并且执行完if内的语句结束 否则执行线路2
+			//线路1
+			if(true){
+				a = 2;
+				return a ;
+			}
+			//线路2
+			return false ? 
+			a = 3 :
+			a = 4
+		}
+	```
+	
+	
+#### 参考
+[1.jQuery源码学习之七](http://blog.csdn.net/hdchangchang/article/details/38331455)
+****
