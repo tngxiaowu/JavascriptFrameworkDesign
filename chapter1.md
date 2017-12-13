@@ -1,4 +1,26 @@
 # chapter 1 
+## 1.3 对象扩展
+### P3
+#### 1.prototype.js的扩展方法
+```
+	function extend(destination,source){
+		//遍历对象内的属性/数组内的元素
+		for( var property in source){
+			destination[property] = source[property]
+		}
+			return destination;
+		}
+		//小demo
+		var obj1 = {a:function(){console.log('hello world')}};
+		var obj2 = {};
+		extend(obj2,obj1);
+		console.log('obj2',obj2);
+		//obj2就有obj1中的方法了
+		obj2.a();
+		
+```
+
+
 
 ## 1.4 数组化
 ### p6
@@ -116,6 +138,43 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 ```
 
 
+**************
+### P12 
+#### 1.Javascript几个比较“独特”的属性
+
+##### 1.1 a !== a
+```
+	console.log(NaN === NaN)
+```
+
+##### 1.2 a == b && b != a
+
+```
+	//在IE678中显示flase(其他现代浏览器中显示false)
+	console.log(document == window);
+	//在IE678中显示true(其他现代浏览器中显示false)
+	console.log(window == document);
+
+```
+
+##### 1.3 a == !a
+
+##### 1.4 a === a+100
+
+##### 1.5
+
+```
+	console.log(3>2>1); //输出false
+	console.log(1<2<3); //输出true
+
+```
+
+>>知识点：		
+>>**javascript的隐式计算:** 3>2=>输出true,true>1,这时候boolean会自动地转换成1,1>1,输出false。		
+
+***********
+ 
+
 
 ### P14
 #### 1.jQuery中判断数据类型的方法
@@ -178,4 +237,18 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 	
 #### 参考
 [1.jQuery源码学习之七](http://blog.csdn.net/hdchangchang/article/details/38331455)
+
+#### 2.判断是否是window对象
+```
+	function isWindow(obj){
+		return obj.window = obj;
+	}
+```
+这个方法很不健壮，我们可以创造出一个假的对象出来。
+
+**?:**	我们为什么要判断一个对象是否为window对象呢？意义何在？
+
+参考:		
+[1.为什么设计window.window?](https://www.zhihu.com/question/23535540?sort=created)
+
 ****
