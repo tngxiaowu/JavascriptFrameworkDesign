@@ -20,6 +20,15 @@
 		
 ```
 
+#### 2.Object.keys
+```
+	Object.keys = Object.keys || function(obj){
+		var a = [];
+		//这是一句厉害的代码 可以把
+		for(a[a.length] in obj);
+		return a;
+	}
+```
 
 
 ## 1.4 数组化
@@ -160,9 +169,18 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 ##### 1.3 a == !a
 
 ```
-	var a = '0';
-	//这里的运算顺序是 '0'转换为数字0 然后右边的!a为false 0 == false 自动跳入Boolean环境
-	console.log(a == !a);
+	//案例1
+	{
+		let a = '0';
+		//这里的运算顺序是 '0'转换为数字0 然后右边的!a为false 0 == false 自动跳入Boolean环境
+		console.log(a == !a);
+	}
+	//案例2：
+	{
+		let a = [];
+		console.log(a == !a); //输出true
+	}
+	
 ```
 
 >> 知识点：函数运算符的优先级 
