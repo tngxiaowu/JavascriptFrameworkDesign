@@ -24,11 +24,14 @@
 ```
 	Object.keys = Object.keys || function(obj){
 		var a = [];
-		//这是一句厉害的代码 可以把
+		//这是一句厉害的代码 还是不太理解 它的扩展性是从哪里来的？
 		for(a[a.length] in obj);
 		return a;
 	}
 ```
+
+>> 解释：```for(a[a.length] in obj);```这句代码的意思：初始a.length = 0
+第一次遍历：a[0] = 遍历属性1，a.length = 1，然后开始第二次遍历……直到遍历完成
 
 
 ## 1.4 数组化
