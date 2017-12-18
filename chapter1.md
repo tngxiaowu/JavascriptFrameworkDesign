@@ -151,6 +151,35 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 
 
 **************
+### P11
+#### 1.如何判断null/undefined/NaN
+```
+	//判断是否是Null
+	function isNull(obj){
+		return obj === null;
+	}
+	
+	//判断是否是NaN
+	function isNaN(obj){
+		return obj !== obj;
+	}
+	
+	//判断是否是undefined
+	function isUndefined(obj){
+			//Q：为什么这里要用void 0来代替undefined?
+			return obj === void 0;
+	}
+```
+
+>> 知识点总结：		
+>> 1. undefined在js全局作用域中它是一个只读的属性，不可以重写.但是在局部作用域中，它是可以重新写入的。		
+>> 2. void表达式无论表达式内容是什么，返回的都是undefined，所以void 0是最短小便捷的，因此选择了这个形式。
+
+参考文章	
+1.[Why does void 0 replace undefined](https://github.com/hanzichi/underscore-analysis/issues/1)
+
+
+*************
 ### P12 
 #### 1.Javascript几个比较“独特”的属性
 
@@ -288,3 +317,41 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 [1.为什么设计window.window?](https://www.zhihu.com/question/23535540?sort=created)
 
 ****
+
+### P15 
+#### 1.jQuery.isNaN()
+在jQuery 1.7之后，大神用isNumberic方法代替了NaN方法。这个方法不仅对数字有效，而且对所有长得像数字的字符串也有效~
+
+```
+	jQuery.isNumberic = function(obj){
+			//条件1 是否是NaN 如果是 立马输出false
+			//条件2 判断这个数是不是在js的数字范围内~
+			return !isNaN(parseFloat(obj)) && isFinite(obj);
+		}
+	
+	//demo
+	isNumberic(1) //输出true;
+	isNumberic('1') //输出true
+
+```
+
+>>需要理解的点：		
+1. psrseFloat的转换；		
+需要再去理解parseFloat这个函数。	
+2.isFinite函数的源码	
+为什么输入isFinite('1')输出的也是true?
+
+到了2.1版本，更加“飘逸”了。
+
+```
+
+	jQuery.isNumberic = function(obj){
+		
+			return obj - parseFloat(obj) >= 0;
+		}
+
+```
+
+>>知识点：		
+>>1. js的隐式转换
+
