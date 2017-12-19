@@ -1,5 +1,18 @@
 #Chapter 2
-## P21
+## P23
+### 1.contains方法(判断一个字符串中是否包含另一个字符串)
+```
+	function contains(target,it){
+			//其实就是使用了indexOf方法
+			return target.indexOf(it) != -1;
+		}
+
+```
+
+
+****
+
+## P24
 ### 1.字符串repeat操作的多种方法
 #### 1.1 方法1
 ```
@@ -34,4 +47,26 @@
 				join.call(obj,target);
 			}
 		})()
+```
+		
+*********
+
+
+## P26
+### 1.byteLen(计算字符串所字节长度)
+#### 1.1 
+
+思路：先计算字符串的长度，然后遍历字符串中的每一个字符串，如果它的unicode编码大于255，那么字节长度加一。
+
+```
+	function byteLen(str){
+		var byteLength = str.length, i=0;
+		//如果这里的str.length写成byteLength会产生问题
+		for(; i< str.length; i++){
+			if(str.charCodeAt(i)>255){
+				byteLength++;
+			}
+		} 
+		return length;
+	}
 ```
