@@ -355,3 +355,59 @@ Array.prototype.slice.call(arguments)能将具有length属性的对象转成数�
 >>知识点：		
 >>1. js的隐式转换
 
+## 1.6 domReady
+### P18
+#### 1.为什么需要domReady机制？
+通常我们写的js脚本需要在html文本的DOM和相应资源加载完毕之后才能执行。试想如果一个页面包含100张图片，网速又很慢的情况，如果没有加载完这些图片资源，那么绑定的事件就无法生效，会“假”死一会。所以我们需要一个事件，在dom节点加载完成之后就将js脚本执行绑定。这个事件就是DomContentLoaded事件，或者也可以说是domReady事件。对于高级的浏览器来说，他们是有这个属性的。		
+
+```
+	if (document.addEventListener) {
+		document.addEventListener( "DOMContentLoaded", completed, false );
+ 	}
+```	
+
+然而对于NB的IE或者说低版本的IE，如何去做兼容则是个问题。	
+
+相关参考文章：		
+[《谈谈DOMContentLoaded：Javascript中的domReady引入机制》](https://www.cnblogs.com/horve/p/4092064.html)
+
+#### 2.各框架对于兼容性的尝试：
+- IE模拟DOMContentLoaded
+
+```
+	function IEContentLoaded(w,fn) {
+			var d = w.document, done = false;
+			//只执行一次的回调函数Init
+			init = function(){
+				if(!done){
+					done = true;
+					fn();
+				}
+			};
+			(function(){
+				try{
+					// 通过IE中的document.documentElement.doScroll(‘left’)来判断DOM树是否创建完毕
+					// dom树创建完之前叫调用doScroll会抛出错误
+					d.documentElement.doScroll('left');
+				}catch(e){
+					//延迟使用一次
+					//这里的arguments.callee指向的是闭包里的匿名函数。自己再执行一次。如果没有false，那么就过了~
+					setTimeout(arguments.callee,50);
+					return;
+				}
+				//没有错误的话表示DOM数已经创建完毕，马上执行Init
+				init();
+			})();
+			//监听document的加载状态
+			d.onreadystatechange = function(){
+				if(d.readyState == 'complete'){
+				d.onreadystatechange = null;
+				init();
+				}
+			}
+		}
+```
+
+>> 相关知识点：		
+>> arguments.callee 
+
