@@ -34,6 +34,47 @@
 第一次遍历：a[0] = 遍历属性1，a.length = 1，然后开始第二次遍历……直到遍历完成
 
 
+###P5 
+#### 1.针对Object.assign的补丁
+Object.assign是ES6新增的对象方法。它的用处是将所有源对象上的可枚举属性全部赋值到目标对象上。如果浏览器不支持assign方法，我们可以将它打补丁。以下是Object.assign的补丁。
+
+```
+		//将目标转换为对象 并且将null和undefined排除在外 
+		//原因是null和undefined强制转化为对象后都是空对象
+		function ToObject(val){
+			if(val === null || val === void 0){
+				throw new TypeError('Object.assign can not be with null or undefined');
+			}
+			return Object(val);
+		}
+
+		//如果没有object.assign 那么可以用这个方法来代替
+		module.export = Object.assign || function(target,source){
+			//定义源对象
+			var from;
+			//可遍历的属性集合
+			var keys;
+			//定义目标对象
+			var To = ToObject(target);
+			//根据参数的数量 
+			//s之所以设置为1，因为第二个设置为源对象 第一个是目标对象
+			//双重循环遍历，利用Object.keys遍历出源对象的所有可枚举属性
+			for(var s = 1; s<arguments.length; s++){
+				from = arguments[s];
+				keys = Object.keys(Object(from));
+				for(var i = 0; i<keys.length; i++){
+					To[keys[i]] = from[keys[i]];
+				}
+			}
+
+			return To;
+		}
+
+
+```
+
+************
+
 ## 1.4 数组化
 ### p6
 #### 1.使用Array.prototype.slice.call将类数组转换为数组
